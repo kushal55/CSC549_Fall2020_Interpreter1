@@ -1,8 +1,13 @@
+import Parser.*;
 
 public class Driver 
 {
-	public static void main(String[] args)
+	public static void main(String[] args) 
 	{
-		System.out.println("hello world");
+		Parser.parse("input.spyder");
+		//Parser.display();
+		Interpreter.SpyderInterpreter.interpret(Parser.getParsedStatements());
+		Interpreter.SpyderInterpreter.displayResults();
+		int a = 5;
 	}
 }
