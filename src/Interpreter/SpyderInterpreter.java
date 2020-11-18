@@ -1,6 +1,7 @@
 package Interpreter;
 
 import java.util.ArrayList;
+
 import Parser.*;
 
 public class SpyderInterpreter 
@@ -43,30 +44,44 @@ public class SpyderInterpreter
 		return true;
 	}
 	
-	private static int interpretDoMathExpression(DoMathExpression dm)
+	private static int interpretLiteralExpression(LiteralExpression le)
 	{
+		if(le instanceof Int_LiteralExpression)
+		{
+			return ((Int_LiteralExpression) le).getValue();
+		}
+		throw new RuntimeException("Not a valid literal type...");
+	}
+	
+	private static int interpretDoMathExpression(DoMathExpression dme)
+	{
+		Expression left = dme.getLeft();
+		int leftValue = SpyderInterpreter.getExpressionValue(left);
+		Expression right = dme.getRight();
+		int rightValue = SpyderInterpreter.getExpressionValue(right);
+		String math_op = dme.getOp();
 		
-		//only look up the variable in the env if it is not a LITERAL
-		//Literal Types: int
-		//this try/catch attempts to convert a string to an int and if it fails it
-		//looks the string up as a variable name
-		try
+		if(math_op.equals("+"))
 		{
-			//tries to treat it as a int literal
-			return Integer.parseInt(dm.getName());	
+			return leftValue + "DoMath" + rightValue;
 		}
-		catch(Exception e)
+		else if(math_op.equals("-"))
 		{
-			try
-			{
-				//if not a literal, look it up in our environment
-				return SpyderInterpreter.theEnv.getValue(dm.getName());
-			}
-			catch(Exception e2)
-			{
-				throw new RuntimeException("Variable " + dm.getName() + " NOT FOUND!");
-			}
+			return leftValue - "DoMath" + rightValue;
 		}
+		else if(math_op.equals("*"))
+		{
+			return leftValue * "DoMath" + rightValue;
+		}
+		else if(math_op.equals("/"))
+		{
+			return leftValue / rightValue;
+		}
+		else if(math_op.equals("%"))
+		{
+			return leftValue % rightValue;
+		}
+		throw new RuntimeException("Not a valid math operator: " + math_op);
 	}
 	
 	private static int interpretResolveExpression(ResolveExpression rs)
@@ -95,22 +110,38 @@ public class SpyderInterpreter
 		}
 	}
 	
-	private static int getExpressionValue2(Expression e)
-	{
-		if(e instanceof DoMathExpression)
-		{
-			return SpyderInterpreter.interpretDoMathExpression((DoMathExpression)e);
-		}
-		throw new RuntimeException("Not a known expression type: " + e.getExpressionType());
-	}
-	
 	private static int getExpressionValue(Expression e)
 	{
 		if(e instanceof ResolveExpression)
 		{
 			return SpyderInterpreter.interpretResolveExpression((ResolveExpression)e);
 		}
+		else if(e instanceof LiteralExpression)
+		{
+			return SpyderInterpreter.interpretLiteralExpression((LiteralExpression) e);
+		}
+		else if(e instanceof DoMathExpression)
+		{
+			return SpyderInterpreter.interpretDoMathExpression((DoMathExpression) e);
+		}
 		throw new RuntimeException("Not a known expression type: " + e.getExpressionType());
+	}
+	
+	private static int getExpressionValue2(Expression e2)
+	{
+		if(e instanceof ResolveExpression)
+		{
+			return SpyderInterpreter.interpretResolveExpression((ResolveExpression)e);
+		}
+		else if(e instanceof LiteralExpression)
+		{
+			return SpyderInterpreter.interpretLiteralExpression((LiteralExpression) e);
+		}
+		else if(e instanceof DoMathExpression)
+		{
+			return SpyderInterpreter.interpretDoMathExpression((DoMathExpression) e);
+		}
+		throw new RuntimeException("Not a known expression type: " + e2.getExpressionType());
 	}
 	
 	private static void interpretRememberStatement(RememberStatement rs)

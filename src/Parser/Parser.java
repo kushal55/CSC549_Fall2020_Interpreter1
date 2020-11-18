@@ -20,12 +20,6 @@ public class Parser
 		}
 	}
 	
-	static DoMathExpression parseDoMath(int expression, int mathop, int expression2)
-	{
-		DoMathExpression dm = new DoMathExpression(expression, mathop, expression);
-		return dm;
-	}
-	
 	static ResolveExpression parseResolve(String name)
 	{
 		//parse this string into language objects
@@ -34,12 +28,35 @@ public class Parser
 		return rs;
 	}
 	
-	static RememberStatement parseRemember(String type, String name, String valueExpression)
+	static DoMathExpression parseDoMath(String expression)
+	{
+		//do-math do-math a + 7 + 4 - doesn't work for this YET!
+		//make the above work for HW
+		
+		//do-math a + 7 - will work for this
+		// (resolve expression a) + (int_lit expression 7)
+		//right now we are assuming only a single level of do-math
+		String[] theParts = expression.split("\\s+");
+		Expression left = Parser.parseExpression(theParts[1]);
+		String math_op = theParts[2];
+		Expression right = Parser.parseExpression(theParts[3,4,5]);
+		
+		//create and return an instance of DoMathExpression
+		DoMathExpression theResult = new DoMathExpression(left, math_op, right);
+		return theResult;
+	}
+	
+	static LiteralExpression parseLiteral(String value)
+	{
+		//We ONLY have a single LiteralType - int literal
+		return new Int_LiteralExpression(Integer.parseInt(value));
+	}
+	
+	static RememberStatement parseRemember(String type, String name, Expression valueExpression)
 	{
 		//parse this string into language objects
 		//turn remember syntax into a RememberStatement
-		ResolveExpression re = (ResolveExpression)Parser.parseExpression(valueExpression);
-		RememberStatement rs = new RememberStatement(type, name, re);
+		RememberStatement rs = new RememberStatement(type, name, valueExpression);
 		return rs;
 	}
 	
@@ -69,15 +86,28 @@ public class Parser
 		}
 	}
 	
-	static Expression parseExpression(String expression, int mathop)
-	{
-		return Parser.parseDoMath(expression, mathop);
-	}
 	static Expression parseExpression(String expression)
 	{
 		//determine which kind of expression this is, and parse it
 		//right now we only have a single kind of expression (ResolveExpression)
-		return Parser.parseResolve(expression);
+		//Possible expressions types:
+		// do-math, resolve, literal
+		String[] theParts = expression.split("\\s+");
+		if(theParts[0].equals("do-math"))
+		{
+			//must be a do-math expression
+			return Parser.parseDoMath(expression);
+		}
+		else if(Character.isDigit(theParts[0].charAt(0))) //does the value start with a number
+		{
+			//must a literal expression
+			return Parser.parseLiteral(expression);
+		}
+		else
+		{
+			//must be a var name
+			return Parser.parseResolve(expression);
+		}
 	}
 	
 	//parses the top level statements within our language
@@ -85,6 +115,7 @@ public class Parser
 	{
 		//split the string on white space (1 or more spaces)
 		String[] theParts = s.split("\\s+");
+		// remember int b = do-math 5 + a;
 		//s = "remember int a = 5"
 		//parts = {"remember", "int", "a", "=", "5"}
 		//s = "resolve a"
@@ -92,9 +123,21 @@ public class Parser
 		
 		if(theParts[0].equals("remember"))
 		{
+			int posOfEqualSign = s.indexOf('=');
+			String everythingAfterTheEqualSign = s.substring(posOfEqualSign+1).trim();
+	
 			//parse a remember statement with type, name, and value
 			theListOfStatements.add(Parser.parseRemember(theParts[1], 
-					theParts[2], theParts[4]));
+					theParts[2], Parser.parseExpression(everythingAfterTheEqualSign)));
+		}
+		else if(theParts[0].equals("DoMath"))
+		{
+			int posOfEqualSign = s.indexOf('=');
+			String everythingAfterTheEqualSign = s.substring(posOfEqualSign+1).trim();
+	
+			//parse a remember statement with type, name, and value
+			theListOfStatements.add(Parser.parseRemember(theParts[1], 
+					theParts[2],theParts[3],theParts[4], Parser.parseExpression(everythingAfterTheEqualSign)));
 		}
 	}
 }
