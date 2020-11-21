@@ -135,7 +135,7 @@ public class SpyderInterpreter
 		{
 			return SpyderInterpreter.interpretResolveExpression((ResolveExpression)e);
 		}
-		else if(e instanceof LiteralExpression)
+		else if(e instanceof TestExpression)
 		{
 			return SpyderInterpreter.interpretTestExpression((TestExpression) e);
 		}
