@@ -44,6 +44,25 @@ public class SpyderInterpreter
 		return true;
 	}
 	
+	private static int interpretTestExpression(TestExpression tx)
+	{
+		Expression left = tx.getLeft();
+		int leftValue = SpyderInterpreter.getExpressionValue(left);
+		Expression right = tx.getRight();
+		int rightValue = SpyderInterpreter.getExpressionValue(right);
+		String math_op = tx.getOp();
+		
+		if(math_op.equals(">"))
+		{
+			return leftValue + rightValue;
+		}
+		throw new RuntimeException("Not a valid math operator: " + math_op);
+	}
+	
+	private static string interpretQuestionStatement(QuestionStatement qs)
+	{
+		return ((QuestionStatement) qs).getName();
+	}
 	private static int interpretLiteralExpression(LiteralExpression le)
 	{
 		if(le instanceof Int_LiteralExpression)
@@ -63,15 +82,15 @@ public class SpyderInterpreter
 		
 		if(math_op.equals("+"))
 		{
-			return leftValue + "DoMath" + rightValue;
+			return leftValue + rightValue;
 		}
 		else if(math_op.equals("-"))
 		{
-			return leftValue - "DoMath" + rightValue;
+			return leftValue - rightValue;
 		}
 		else if(math_op.equals("*"))
 		{
-			return leftValue * "DoMath" + rightValue;
+			return leftValue * rightValue;
 		}
 		else if(math_op.equals("/"))
 		{
@@ -118,20 +137,7 @@ public class SpyderInterpreter
 		}
 		else if(e instanceof LiteralExpression)
 		{
-			return SpyderInterpreter.interpretLiteralExpression((LiteralExpression) e);
-		}
-		else if(e instanceof DoMathExpression)
-		{
-			return SpyderInterpreter.interpretDoMathExpression((DoMathExpression) e);
-		}
-		throw new RuntimeException("Not a known expression type: " + e.getExpressionType());
-	}
-	
-	private static int getExpressionValue2(Expression e2)
-	{
-		if(e instanceof ResolveExpression)
-		{
-			return SpyderInterpreter.interpretResolveExpression((ResolveExpression)e);
+			return SpyderInterpreter.interpretTestExpression((TestExpression) e);
 		}
 		else if(e instanceof LiteralExpression)
 		{
@@ -141,7 +147,7 @@ public class SpyderInterpreter
 		{
 			return SpyderInterpreter.interpretDoMathExpression((DoMathExpression) e);
 		}
-		throw new RuntimeException("Not a known expression type: " + e2.getExpressionType());
+		throw new RuntimeException("Not a known expression type: " + e.getExpressionType());
 	}
 	
 	private static void interpretRememberStatement(RememberStatement rs)
