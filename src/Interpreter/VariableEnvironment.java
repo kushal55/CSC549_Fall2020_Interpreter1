@@ -39,4 +39,5 @@ public class VariableEnvironment
 		}
 		//return -1;
 		throw new Exception("Variable Not Found");
-	}}
+	}
+}

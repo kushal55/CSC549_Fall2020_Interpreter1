@@ -2,21 +2,37 @@ package Parser;
 
 public class QuestionStatement extends Statement
 {
-	private String name;
+	private TestExpression testExpression;
+	private Statement trueStatement;
+	private Statement falseStatement;
 	
-	public QuestionStatement(String name)
+	public QuestionStatement(TestExpression testExpression, Statement trueStatement, Statement falseStatement)
 	{
 		super("Question Statement");
-		this.name = name;
-	}
-	
-	public String toString()
-	{
-		return super.toString() + "\n\t" + this.name;
+		this.testExpression = testExpression;
+		this.trueStatement = trueStatement;
+		this.falseStatement = falseStatement;
 	}
 
-	public String getName() 
+	public String toString()
 	{
-		return name;
-	}	
+		return super.toString() + "\n\t" + this.testExpression.toString() +
+				"\n\t\t" + this.trueStatement.toString() + 
+				"\n\t\t" + this.falseStatement.toString();				
+	}
+
+	public TestExpression getTestExpression() 
+	{
+		return testExpression;
+	}
+
+	public Statement getTrueStatement() 
+	{
+		return trueStatement;
+	}
+
+	public Statement getFalseStatement() 
+	{
+		return falseStatement;
+	}
 }
