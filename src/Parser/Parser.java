@@ -151,6 +151,12 @@ public class Parser
 		return theResult;
 	}
 	
+	static UpdateStatement parseUpdate(String name, int value)
+	{
+		UpdateStatement us = new UpdateStatement(name, value);
+		return us;
+	}
+	
 	static LiteralExpression parseLiteral(String value)
 	{
 		//We ONLY have a single LiteralType - int literal
@@ -163,12 +169,6 @@ public class Parser
 		//turn remember syntax into a RememberStatement
 		RememberStatement rs = new RememberStatement(type, name, valueExpression);
 		return rs;
-	}
-	
-	static UpdateStatement parseUpdate(String name, int value)
-	{
-		UpdateStatement us = new UpdateStatement(name, value);
-		return us;
 	}
 	
 	static QuestionStatement parseQuestion(TestExpression testExpression, Statement trueStatement, Statement falseStatement)
@@ -243,42 +243,27 @@ public class Parser
 		//s = "resolve a"
 		//parts = {"resolve", "a"}
 		
-		if(theParts[0].equals("remember"))
+		if(theParts[0].equals("update"))
 		{
 			int posOfEqualSign = s.indexOf('=');
 			String everythingAfterTheEqualSign = s.substring(posOfEqualSign+1).trim();
 	
 			//parse a remember statement with type, name, and value
 			return Parser.parseRemember(theParts[1], 
-					theParts[2], Parser.parseExpression(everythingAfterTheEqualSign));
-		}
-		
-		else if(theParts[0].equals("update"))
-		{
-			String expression = s.substring("update".length()).trim();
-			int posOfEqualSign = s.indexOf('=');
-			String everythingAfterTheEqualSign = s.substring(posOfEqualSign+1).trim();
-	
-			//parse a remember statement with type, name, and value
-			return Parser.parseUpdate(theParts[1], 
 					theParts[3], Parser.parseExpression(everythingAfterTheEqualSign));
-			
 		}
-		
-		else if(theParts[0].equals("question"))
+		while(theParts[0].equals("while"))
 		{
-			String expression = s.substring("question".length()).trim();
+			String expression = s.substring("while".length()).trim();
 			int posOfDoKeyword = expression.indexOf("do");
 			String testExpression = expression.substring(0, posOfDoKeyword);
 			expression = expression.substring(posOfDoKeyword + "do".length()).trim();
-			int posOfOtherwiseKeyword = expression.indexOf("otherwise");
-			String trueStatement = expression.substring(0, posOfOtherwiseKeyword).trim();
-			String falseStatement = expression.substring(posOfOtherwiseKeyword + "otherwise".length()).trim();
+			int posOfDoMathKeyword = expression.indexOf("DoMath");
+			String trueStatement = expression.substring(0, posOfDoMathKeyword).trim();
+			String falseStatement = expression.substring(posOfDoMathKeyword + "DoMath".length()).trim();
 			
-			return Parser.parseQuestion(
-							(TestExpression)Parser.parseExpression(testExpression), 
-							Parser.parseStatement(trueStatement), 
-							Parser.parseStatement(falseStatement));
+			return Parser.parseDoMath(Parser.parseDoMath(expression)); 
+							
 			
 		}
 		throw new RuntimeException("Not a known statement type: " + s);

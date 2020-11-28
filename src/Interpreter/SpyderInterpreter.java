@@ -231,12 +231,18 @@ public class SpyderInterpreter
 	private static void interpretUpdateStatement(UpdateStatement us)
 	{
 		//we need to resolve this expression before we can actually remember anything
-		Expression valueExpression = us.getValue();
+		int valueExpression = us.getValue();
 		int answer = SpyderInterpreter.getValue(valueExpression);
 		
 		SpyderInterpreter.theEnv.addVariable(us.getName(), answer);
 		SpyderInterpreter.theOutput.add("<HIDDEN> Added " +us.getName() + " = " + answer + " to the variable environment.");
 	}
+	
+	private static int getValue(int valueExpression) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 	private static void interpretQuestionStatement(QuestionStatement qs)
 	{
 		//we need to resolve this expression before we can actually remember anything
@@ -253,5 +259,5 @@ public class SpyderInterpreter
 			//testExpression was false, so execute the falseStatement
 			SpyderInterpreter.interpretStatement(qs.getFalseStatement());
 		}
-	}
+	}	
 }

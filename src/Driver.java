@@ -9,7 +9,6 @@ public class Driver
 		V1.display();
 		V1.setValue(9);
 		V1.display();
-		
 		Parser.parse("input.spyder");
 		//Parser.display();
 		Interpreter.SpyderInterpreter.interpret(Parser.getParsedStatements());
