@@ -42,6 +42,14 @@ public class SpyderInterpreter
 		{
 			SpyderInterpreter.interpretPrintStatement((PrintStatement)s);
 		}
+		else if(s instanceof BlockStatement)
+		{
+			SpyderInterpreter.interpretBlockStatement((BlockStatement)s);
+		}
+		else if(s instanceof SplitBlockStatement)
+		{
+			SpyderInterpreter.interpretSplitBlockStatement((SplitBlockStatement)s);
+		}
 	}
 	
 	public static void interpret(ArrayList<Statement> theStatements)
@@ -235,6 +243,15 @@ public class SpyderInterpreter
 		SpyderInterpreter.theEnv.addVariable(rs.getName(), answer);
 		SpyderInterpreter.theOutput.add("<HIDDEN> Added " + rs.getName() + " = " + answer + " to the variable environment.");
 	}
+	private static void interpretSplitBlockStatement(SplitBlockStatement rs)
+	{
+		//we need to resolve this expression before we can actually remember anything
+		ArrayList<Statement> valueExpression = rs.getStatements();
+		int answer = SpyderInterpreter.getExpressionValue(valueExpression);
+		
+		SpyderInterpreter.theEnv.addVariable(rs.getName(), answer);
+		SpyderInterpreter.theOutput.add("<HIDDEN> Added " + rs.getName() + " = " + answer + " to the variable environment.");
+	}
 	
 	private static void interpretWhileStatement(WhileStatement ws)
 	{
@@ -269,6 +286,15 @@ public class SpyderInterpreter
 		Expression expression_to_print = ps.getExpression_to_print();
 		int answer = SpyderInterpreter.getExpressionValue(expression_to_print);
 		SpyderInterpreter.theOutput.add("***** " + answer);
+	}
+	
+	private static void interpretBlockStatement(BlockStatement bs)
+	{
+		ArrayList<Statement> statements = bs.getStatements();
+		for(Statement stmt : statements)
+		{
+			SpyderInterpreter.interpretStatement(stmt);
+		}
 	}
 	
 	private static void interpretQuestionStatement(QuestionStatement qs)

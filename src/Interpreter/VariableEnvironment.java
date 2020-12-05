@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class VariableEnvironment 
 {
-	private ArrayList<NameValuePair> theVariables;
+private ArrayList<NameValuePair> theVariables;
 	
 	public VariableEnvironment()
 	{
@@ -20,6 +20,7 @@ public class VariableEnvironment
 	
 	public void updateVariable(String name, int value)
 	{
+		name = name.trim();
 		for(NameValuePair nvp : this.theVariables)
 		{
 			if(nvp.getName().equals(name))
