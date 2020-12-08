@@ -5,7 +5,6 @@ import java.util.Scanner;
 
 public class Parser 
 {
-	private static final String Char = null;
 	private static ArrayList<Statement> theListOfStatements = new ArrayList<Statement>();
 	
 	public static ArrayList<Statement> getParsedStatements()
@@ -261,24 +260,7 @@ public class Parser
 		//parts = {"remember", "int", "a", "=", "5"}
 		//s = "resolve a"
 		//parts = {"resolve", "a"}
-		int BeginCount;
-		Object i;
-		for(BeginCount = 0, BeginCount<= Char(i), BeginCount++)
-		{
-			int Left+=BeginCount;
-			BeginCount++;
-		}
-		if(theParts[0].equals("Begin||End"))
-		{
-			String temp = s.substring("begin".length(),s.length() - "end".length()).trim();
-			String[] blockParts = temp.split(",");
-			ArrayList<Statement> theStatements = new ArrayList<Statement>();
-			for(String stmt : blockParts)
-			{
-				theStatements.add(Parser.parseStatement(stmt.trim()));
-			}
-			return Parser.parseBlock(theStatements);
-		}
+		
 		if(theParts[0].equals("remember"))
 		{
 			int posOfEqualSign = s.indexOf('=');
@@ -293,22 +275,6 @@ public class Parser
 			String temp = s.substring("print".length()).trim();
 			Expression expression_to_print = Parser.parseExpression(temp);
 			return Parser.parsePrint(expression_to_print);
-		}
-		else if(theParts[0].equals("SplitBlock")) //NOT CURRENTLY COMPATIBLE WITH EMBEDDED BLOCKS
-		{
-			//begin print e, update e = do-math e - 1 end
-			String temp = s.substring("SplitBlock".length(),s.length() - "end".length()).trim();
-			//temp is currently: print e, update e = do-math e - 1
-			//how do we split this into a collection of statements?
-			//if we split on "," this would assume that there are zero block 
-			//statements inside this block statement.
-			String[] blockParts = temp.split(",");
-			ArrayList<Statement> theStatements = new ArrayList<Statement>();
-			for(String stmt : blockParts)
-			{
-				theStatements.add(Parser.parseStatement(stmt.trim()));
-			}
-			return Parser.parseBlock(theStatements);
 		}
 		else if(theParts[0].equals("begin")) //NOT CURRENTLY COMPATIBLE WITH EMBEDDED BLOCKS
 		{
@@ -363,10 +329,5 @@ public class Parser
 			
 		}
 		throw new RuntimeException("Not a known statement type: " + s);
-	}
-
-	private static Object BeginCount(String c, int i) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

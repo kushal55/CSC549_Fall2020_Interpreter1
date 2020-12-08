@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class VariableEnvironment 
 {
-private ArrayList<NameValuePair> theVariables;
+	private ArrayList<NameValuePair> theVariables;
 	
 	public VariableEnvironment()
 	{

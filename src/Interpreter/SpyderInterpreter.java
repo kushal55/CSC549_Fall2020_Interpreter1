@@ -46,10 +46,6 @@ public class SpyderInterpreter
 		{
 			SpyderInterpreter.interpretBlockStatement((BlockStatement)s);
 		}
-		else if(s instanceof SplitBlockStatement)
-		{
-			SpyderInterpreter.interpretSplitBlockStatement((SplitBlockStatement)s);
-		}
 	}
 	
 	public static void interpret(ArrayList<Statement> theStatements)
@@ -238,15 +234,6 @@ public class SpyderInterpreter
 	{
 		//we need to resolve this expression before we can actually remember anything
 		Expression valueExpression = rs.getValueExpression();
-		int answer = SpyderInterpreter.getExpressionValue(valueExpression);
-		
-		SpyderInterpreter.theEnv.addVariable(rs.getName(), answer);
-		SpyderInterpreter.theOutput.add("<HIDDEN> Added " + rs.getName() + " = " + answer + " to the variable environment.");
-	}
-	private static void interpretSplitBlockStatement(SplitBlockStatement rs)
-	{
-		//we need to resolve this expression before we can actually remember anything
-		ArrayList<Statement> valueExpression = rs.getStatements();
 		int answer = SpyderInterpreter.getExpressionValue(valueExpression);
 		
 		SpyderInterpreter.theEnv.addVariable(rs.getName(), answer);
