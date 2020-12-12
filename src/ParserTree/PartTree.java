@@ -1,4 +1,4 @@
-package Parser;
+package ParserTree;
 
 public abstract class PartTree 
 {
@@ -6,14 +6,10 @@ public abstract class PartTree
 	
 	public PartTree(String partType)
 	{
+		super();
 		this.partType = partType;
 	}
 	
-	public String toString()
-	{
-		return "partType: " + this.partType;
-	}
-
 	public String getPartType() 
 	{
 		return partType;
