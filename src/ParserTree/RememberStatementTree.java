@@ -16,7 +16,7 @@ public class RememberStatementTree extends StatementTree
 	
 	public String toString()
 	{
-		return super.toString() + this.type + this.var_Name + " " + this.expression;
+		return super.toString() + this.type + this.var_Name + " = " + this.expression;
 	}
 
 	public SymbolTree getType() {
