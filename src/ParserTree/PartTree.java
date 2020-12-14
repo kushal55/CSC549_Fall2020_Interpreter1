@@ -1,6 +1,6 @@
 package ParserTree;
 
-public abstract class PartTree 
+public abstract class PartTree extends Object
 {
 	protected String partType;
 	
@@ -10,8 +10,7 @@ public abstract class PartTree
 		this.partType = partType;
 	}
 	
-	public String getPartType() 
-	{
+	public String getPartType() {
 		return partType;
 	}
 }

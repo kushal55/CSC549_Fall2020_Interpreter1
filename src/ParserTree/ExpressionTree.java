@@ -2,7 +2,7 @@ package ParserTree;
 
 import java.util.ArrayList;
 
-public abstract class ExpressionTree extends ExpressionPart
+public class ExpressionTree extends ExpressionPart
 {
 	private ArrayList<ExpressionPart> theComponents;
 	

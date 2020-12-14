@@ -2,7 +2,7 @@ package ParserTree;
 
 public class SymbolTree extends ExpressionPart
 {
-	 private String theSymbol;
+	private String theSymbol;
 	
 	public SymbolTree(String theSymbol)
 	{

@@ -21,19 +21,4 @@ public class LanguageCore
 		}
 		return false;
 	}
-	
-	public static String stringConcat(String s)
-	{
-		for(int i = 0; i < LanguageCore.theReservedWords.length; i++)
-		{
-			if(LanguageCore.theReservedWords[i].equals(s))
-			{
-				int count = 1;
-				String temp;
-				temp = temp + theReservedWords[i].equals(s);
-				return temp;				
-			}
-		}
-		return s;
-	}
 }
